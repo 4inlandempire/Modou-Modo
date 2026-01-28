@@ -1,65 +1,56 @@
 import discord
 import os
 from dotenv import load_dotenv
+from discord.ext import commands 
 import json
+
+load_dotenv()
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 def load_data():
     try:
         with open('watchlist.json', 'r', encoding='utf-8') as f:
             return json.load(f)
     except FileNotFoundError:
-        return {"anime":[], "cartoons":[], "films":[], "history":[]}
+        return {"anime":[], "films":[], "cartoons":[], "history":[]}
     
 def save_data(data):
-    with open('watchlist.json', 'w', encoding='utf-8') as f:
+    with open("watchlist.json", 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-load_dotenv()
-
-# On demande le minimum vital pour ne pas faire planter Discord
-intents = discord.Intents.default()
-intents.message_content = True 
-
-client = discord.Client(intents=intents)
-
-@client.event
+@bot.event
 async def on_ready():
-    print(f'✅ EN LIGNE : {client.user}')
+    print(f"En ligne: {bot.user}")
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    print(f"Message vu : {message.content}")
-    if message.content == '!test':
-        await message.channel.send('Le test fonctionne !')
+@bot.command()
+async def add(ctx, category: str, *, item_name: str):
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+    category = category.lower()
+    data = load_data()
 
-    # Commande !add [catégorie] [nom]
-    if message.content.startswith('!add'):
-        parts = message.content.split(' ', 2) # Sépare "!add", "catégorie" et "le reste"
-        
-        if len(parts) < 3:
-            await message.channel.send("Usage: `!add [anime/films/cartoons] [nom]`")
-            return
+    if category in data:
+        data[category].append(item_name.tile())
+        save_data(data)
+        await ctx.send(f"{item_name.title()} a été ajouté {category}!")
+    else:
+        await ctx.send("Catégories valides: Anime, Cartoons, films.")
 
-        category = parts[1].lower()
-        item_name = parts[2]
+@bot.command()   
+async def list(ctx, category:str = None):
+    data = load_data()
 
-        # 1. Charger les données actuelles
-        data = load_data()
+    if category in data:
+        items = data[category]
+        reponse = ''
 
-        # 2. Vérifier si la catégorie existe et ajouter l'item
-        if category in data:
-            data[category].append(item_name)
-            # 3. Sauvegarder dans le fichier JSON
-            save_data(data)
-            await message.channel.send(f"✅ **{item_name}** ajouté à la liste **{category}** !")
-        else:
-            await message.channel.send("❌ Catégorie invalide. Choisis : anime, films ou cartoons.")
-
-client.run(os.getenv('DISCORD_TOKEN'))
+        for item in items:
+            reponse += f"- {item.title()}\n"
+        await ctx.send(reponse)
+    if category not in data:
+        await ctx.send(f"Y a pas de watchlist de {category}, mais sinon namnaleu, ça dit quoi ?")
+    
+bot.run(os.getenv('DISCORD_TOKEN'))
