@@ -43,6 +43,10 @@ async def add(ctx, category: str, *, item_name: str):
 async def show_list(ctx, category:str =None):
     data = load_data()
 
+    if category is not None and category not in data:
+        await ctx.send(f"Y a pas de watchlist de {category}, mais sinon namnaleu, ça dit quoi ?")
+        return
+
     if category in data:
         items = data[category]
         reponse = ''
@@ -63,7 +67,5 @@ async def show_list(ctx, category:str =None):
                 for _ in list:
                    reponse += f"- {_.upper()}\n"
     await ctx.send(reponse)            
-    # if category not in data:
-    #     await ctx.send(f"Y a pas de watchlist de {category}, mais sinon namnaleu, ça dit quoi ?")
     
 bot.run(os.getenv('DISCORD_TOKEN'))
