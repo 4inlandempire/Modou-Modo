@@ -26,7 +26,7 @@ def save_data(data):
 async def on_ready():
     print(f"En ligne: {bot.user}")
 
-@bot.command()
+@bot.command(help="Ajoute un nouvel éléments aux watchlists.")
 async def add(ctx, category: str, *, item_name: str):
 
     category = category.lower()
@@ -39,8 +39,8 @@ async def add(ctx, category: str, *, item_name: str):
     else:
         await ctx.send("Catégories valides: Anime, Cartoons, films.")
 
-@bot.command()   
-async def list(ctx, category:str = None):
+@bot.command(name="list")   
+async def show_list(ctx, category:str =None):
     data = load_data()
 
     if category in data:
@@ -50,7 +50,20 @@ async def list(ctx, category:str = None):
         for item in items:
             reponse += f"- {item.title()}\n"
         await ctx.send(reponse)
-    if category not in data:
-        await ctx.send(f"Y a pas de watchlist de {category}, mais sinon namnaleu, ça dit quoi ?")
+    elif category == None:
+       all_data = data 
+       reponse = ''
+
+       for category, list in data.items():
+           if category == "history": continue 
+
+           reponse += f"**\n-- {category.upper()} --**\n"
+           
+           if list:
+                for _ in list:
+                   reponse += f"- {_.upper()}\n"
+    await ctx.send(reponse)            
+    # if category not in data:
+    #     await ctx.send(f"Y a pas de watchlist de {category}, mais sinon namnaleu, ça dit quoi ?")
     
 bot.run(os.getenv('DISCORD_TOKEN'))
