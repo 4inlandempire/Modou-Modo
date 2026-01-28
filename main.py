@@ -26,7 +26,7 @@ def save_data(data):
 async def on_ready():
     print(f"En ligne: {bot.user}")
 
-@bot.command(help="Ajoute un nouvel éléments aux watchlists.")
+@bot.command(description="!add --categorie(ex:films, anime...)-- --titre-- pour ajouter à une watchlist.", help="Ajoute un nouvel éléments aux watchlists.")
 async def add(ctx, category:str, * , item_name:str):
 
     category = category.lower()
@@ -39,7 +39,8 @@ async def add(ctx, category:str, * , item_name:str):
     else:
         await ctx.send("Catégories valides: Anime, Cartoons, films.")
 
-@bot.command(name="list")   
+@bot.command(description="!ls ou !list --catégorie(ex:films, anime...)-- pour afficher une watchlist ; " \
+"!ls ou !list pour afficher toutes les watchlists.", name="list", aliases=["ls"])
 async def show_list(ctx, category:str =None):
     data = load_data()
 
@@ -54,8 +55,10 @@ async def show_list(ctx, category:str =None):
         for item in items:
             reponse += f"- {item.title()}\n"
         await ctx.send(reponse)
+        return
+        
+
     elif category == None:
-       all_data = data 
        reponse = ''
 
        for category, list in data.items():
