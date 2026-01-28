@@ -27,15 +27,15 @@ async def on_ready():
     print(f"En ligne: {bot.user}")
 
 @bot.command(help="Ajoute un nouvel éléments aux watchlists.")
-async def add(ctx, category: str, *, item_name: str):
+async def add(ctx, category:str, * , item_name:str):
 
     category = category.lower()
     data = load_data()
 
     if category in data:
-        data[category].append(item_name.tile())
+        data[category].append(item_name.title())
         save_data(data)
-        await ctx.send(f"{item_name.title()} a été ajouté {category}!")
+        await ctx.send(f"{item_name.title()} a été ajouté à la watchlist {category.title()}!")
     else:
         await ctx.send("Catégories valides: Anime, Cartoons, films.")
 
