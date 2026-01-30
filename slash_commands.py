@@ -49,6 +49,7 @@ async def add(interaction: discord.Interaction, catégorie: str, nom: str):
     catégorie = catégorie.lower()
     data = load_data()
 
+
     if catégorie in data:
         if nom.title() not in data[catégorie]:
             data[catégorie].append(nom.title())
