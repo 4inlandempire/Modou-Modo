@@ -1,0 +1,21 @@
+{
+    "series": {
+        "Breaking Bad": {
+            "current season": 1,
+            "episodes remaining": 24,
+            "status": "watching",
+            "current episode": 0,
+            "seasons": 5
+        },
+        "Banshee": {
+            "current season": 1,
+            "episodes remaining": 22,
+            "status": "watching",
+            "current episode": 0,
+            "seasons": 4
+        }
+    },
+    "films": {},
+    "anime": {},
+    "cartoons": {}
+}

@@ -1,5 +1,3 @@
-import os
-from dotenv import load_dotenv
 from discord import app_commands
 import discord
 from discord.ext import commands
@@ -14,11 +12,11 @@ class WatchlistCogs(commands.Cog):
         await interaction.response.defer()
         category = category.lower()
         data = load_data()
+        name = name.title()
 
         if category in data:
-            if name.title() not in data[category]:
-                data[category].append(name.title())
-                save_data(data)
+            if name not in data[category]:
+                data[category][name] = {"status":"plan to watch."}
 
                 embed = discord.Embed(title="Nouvel Ajout !",
                                   description=f"**{name.title()}** a rejoint la watchlist {category.title()}!",
@@ -93,6 +91,37 @@ class WatchlistCogs(commands.Cog):
             for item in items:
                 response += f"🔸\t{item.title()}\n"
             await ctx.send(response)
+
+    @app_commands.command(name="start-watching", description="Catégories: films/anime/cartoons/series" )
+    async def start_watching(self, interaction: discord.interactions, category: str, 
+                             name: str, episodes: int, seasons: int):
+        await interaction.response.defer()
+
+        data = load_data()
+        category = category.lower()
+        name = name.title()
+        repertory = data[category]
+
+        if category in data:
+            if name not in category:
+                repertory[name] = {"current season":1,
+                                   "episodes remaining":episodes,
+                                   "status":"watching",
+                                   "current episode":0,
+                                   "seasons":seasons}
+                save_data(data)
+                
+                # TO-DO AJOUTER DES EMBED RENDRE LE TEXTE PLUS DIGESTE 
+                await interaction.followup.send(f"{name.title()} a été ajouté à {category.title()}, il reste {repertory[name]["episodes remaining"]} épisodes.")
+            else:
+                await interaction.followup.send(f"Utilisez la commande /watched pour mettre à jour {name.title()}")
+                return
+        else:
+            await interaction.followup.send(f"Désolé y a pas de catégorie {category.title()}, faut demander en fait.")
+            return
+        
+        # TO-DO AJOUTER LA COMMANDE WATCHED QUI METS A JOUR LA COMMANDE START-WATCHING
+        # TO-DO REMODELER LE NOM DES CATEGORIES AU SINGULIER PARCE QUE "filmS" et "serieS" flemme.
 
 async def setup(bot):
     await bot.add_cog(WatchlistCogs(bot))
