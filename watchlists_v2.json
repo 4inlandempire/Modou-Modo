@@ -17,6 +17,14 @@
     },
     "films": {},
     "anime": {},
-    "cartoons": {},
-    "history":{}
+    "cartoons": {
+        "Midnight Gospel": {
+            "current season": 1,
+            "episodes remaining": 12,
+            "status": "watching",
+            "current episode": 0,
+            "seasons": 1
+        }
+    },
+    "history": {}
 }
