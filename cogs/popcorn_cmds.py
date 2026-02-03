@@ -42,7 +42,7 @@ class WatchlistCogs(commands.Cog):
 
         if category in data:
             if name in data[category]:
-                data[category].remove(name)
+                data[category].pop(name)
                 save_data(data)
                 await interaction.followup.send(f"{interaction.user.display_name} a supprimé {name.title()} de la watchlist {category.title()}.")
                 return
@@ -72,9 +72,7 @@ class WatchlistCogs(commands.Cog):
             for list_n, list in data.items():
                 if list_n == 'history': continue 
                 icon = emojis.get(list_n.lower(), default_emoji)
-                response += f"## {icon}  {list_n.upper()}  {icon} \n\n"
-                if not list:
-                    response += "Vide."
+                response += f"# {icon}  {list_n.upper()}  {icon} \n\n"
 
                 for item in list:
                     response += f"🔸\t{item.title()}\n"
@@ -92,7 +90,7 @@ class WatchlistCogs(commands.Cog):
                 response += f"🔸\t{item.title()}\n"
             await ctx.send(response)
 
-    @app_commands.command(name="start-watching", description="Catégories: films/anime/cartoons/series" )
+    @app_commands.command(name="start-watching", description="Catégorie: Séries/Anime/Cartoons, épisodes, saisons" )
     async def start_watching(self, interaction: discord.interactions, category: str, 
                              name: str, episodes: int, seasons: int):
         await interaction.response.defer()
@@ -111,8 +109,17 @@ class WatchlistCogs(commands.Cog):
                                    "seasons":seasons}
                 save_data(data)
                 
-                # TO-DO AJOUTER DES EMBED RENDRE LE TEXTE PLUS DIGESTE 
-                await interaction.followup.send(f"{name.title()} a été ajouté à {category.title()}, il reste {repertory[name]["episodes remaining"]} épisodes.")
+                embed = discord.Embed(title="Nouvel Ajout", description=f"**{name.title()}** a été ajouté à {category.title()}",
+                                      color=0xE91E63)
+                
+                embed.add_field(name="Ajouté par", value=interaction.user.display_name, inline=True)
+                embed.add_field(name="\nCatégorie", value=category.title())
+                embed.add_field(name="Nombre d'épisodes\n", value=episodes, inline=True)
+                embed.add_field(name="Nombre de saisons", value=seasons)
+
+                embed.set_thumbnail(url=interaction.user.display_avatar.url)
+                embed.set_footer(text="Modou Modo-- V1 | Say namnaleu sérieux")
+                await interaction.followup.send(embed=embed)
             else:
                 await interaction.followup.send(f"Utilisez la commande /watched pour mettre à jour {name.title()}")
                 return
@@ -120,6 +127,7 @@ class WatchlistCogs(commands.Cog):
             await interaction.followup.send(f"Désolé y a pas de catégorie {category.title()}, faut demander en fait.")
             return
         
+        # TO-DO AJOUTER UNE COMMANDE START-MOVIE POUR EVITER D'AVOIR A REMPLIR DES EPISODES 
         # TO-DO AJOUTER LA COMMANDE WATCHED QUI METS A JOUR LA COMMANDE START-WATCHING
         # TO-DO REMODELER LE NOM DES CATEGORIES AU SINGULIER PARCE QUE "filmS" et "serieS" flemme.
         # AJOUT IFCON POUR WATCHED LORSQUE LA DERNIERE SAISON EST ATTEINTE POUR TRANSITION DU NOM VERS HISTORY 

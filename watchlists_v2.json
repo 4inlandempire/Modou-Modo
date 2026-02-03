@@ -13,10 +13,32 @@
             "status": "watching",
             "current episode": 0,
             "seasons": 4
+        },
+        "Peacemaker": {
+            "current season": 1,
+            "episodes remaining": 13,
+            "status": "watching",
+            "current episode": 0,
+            "seasons": 2
+        },
+        "Them": {
+            "current season": 1,
+            "episodes remaining": 17,
+            "status": "watching",
+            "current episode": 0,
+            "seasons": 2
         }
     },
     "films": {},
-    "anime": {},
+    "anime": {
+        "Evangelion": {
+            "current season": 1,
+            "episodes remaining": 24,
+            "status": "watching",
+            "current episode": 0,
+            "seasons": 2
+        }
+    },
     "cartoons": {
         "Midnight Gospel": {
             "current season": 1,
