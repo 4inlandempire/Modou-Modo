@@ -29,7 +29,14 @@
             "seasons": 2
         }
     },
-    "films": {},
+    "films": {
+        "Boyz In The Hood": {
+            "status": "plan to watch."
+        },
+        "Menace I I To Society": {
+            "status": "plan to watch."
+        }
+    },
     "anime": {
         "Evangelion": {
             "current season": 1,
@@ -46,6 +53,13 @@
             "status": "watching",
             "current episode": 0,
             "seasons": 1
+        },
+        "Magical Doremi": {
+            "current season": 1,
+            "episodes remaining": 20,
+            "status": "watching",
+            "current episode": 0,
+            "seasons": 2
         }
     },
     "history": {}

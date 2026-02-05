@@ -13,10 +13,14 @@ class WatchlistCogs(commands.Cog):
         category = category.lower()
         data = load_data()
         name = name.title()
+        categorys = category + 's'
 
-        if category in data:
+        if (category in data) or (categorys in data):
+            if categorys in data:
+                category = categorys
             if name not in data[category]:
                 data[category][name] = {"status":"plan to watch."}
+                save_data(data)
 
                 embed = discord.Embed(title="Nouvel Ajout !",
                                   description=f"**{name.title()}** a rejoint la watchlist {category.title()}!",
@@ -39,8 +43,11 @@ class WatchlistCogs(commands.Cog):
         category = category.lower()
         data = load_data()
         name = name.title()
+        categorys = category + 's'
 
-        if category in data:
+        if (category in data) or (categorys in data):
+            if categorys in data:
+                category = categorys
             if name in data[category]:
                 data[category].pop(name)
                 save_data(data)
@@ -84,7 +91,7 @@ class WatchlistCogs(commands.Cog):
             response = ''
 
             icon = emojis.get(category.lower(), default_emoji)
-            response += f"## {icon}  Watchlist {category.title()}  {icon}\n\n"
+            response += f" {icon}  **Watchlist {category.title()}**  {icon}\n\n"
 
             for item in items:
                 response += f"🔸\t{item.title()}\n"
