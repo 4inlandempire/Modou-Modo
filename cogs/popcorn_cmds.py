@@ -172,11 +172,12 @@ class WatchlistCogs(commands.Cog):
                     await interaction.followup.send(f"update de {interaction.user.display_name}Le film {name.title()} a été regardé!")
                     return 
         
-
-        # TO-DO REMODELER LE NOM DES CATEGORIES AU SINGULIER PARCE QUE "filmS" et "serieS" flemme.
+        # RETIRER ICON GAUCHE DES TITRES WATCHLISTS C'EST trop kitch
+        # RETIRER CATEGORY DE LA LISTE DES ARGUMENTS DE /add-movie
         # AJOUT IFCON POUR WATCHED LORSQUE LA DERNIERE SAISON EST ATTEINTE POUR TRANSITION DU NOM VERS HISTORY 
         # REFLECHIR A UNE COMMANDE POUR LE NOMBRE D'EPISODES PAR SAISON OU SAISON PUIS EPISODES DE LA SAISON TO AVOID HEAVY COMMITMENT
-        # ADD A STATUS CHANGE COMMAND FOR THE ADDS TO THE JSON DICT
+        # TO-DO AJOUTER UN A WATCHLIST UN --NAME--  (1/12 EPISODES)
+        # FIGURE OUT COMMENT TRAVAILLER SANS JSON OU EN FOURNIR UN LOCAL POUR LE DISCORD 
 
 async def setup(bot):
     await bot.add_cog(WatchlistCogs(bot))
