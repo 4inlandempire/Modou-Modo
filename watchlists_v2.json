@@ -35,6 +35,9 @@
         },
         "Menace I I To Society": {
             "status": "plan to watch."
+        },
+        "Him": {
+            "status": "watched"
         }
     },
     "anime": {
@@ -44,6 +47,13 @@
             "status": "watching",
             "current episode": 0,
             "seasons": 2
+        },
+        "The Summer Hikaru Died": {
+            "current season": 1,
+            "episodes remaining": 4,
+            "status": "watching",
+            "current episode": 8,
+            "seasons": 1
         }
     },
     "cartoons": {

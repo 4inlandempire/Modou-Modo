@@ -7,7 +7,7 @@ class WatchlistCogs(commands.Cog):
     def __init__(self, bot):
         self.bot = bot 
 
-    @app_commands.command(name="add-to-watchlist", description="Categories: films, cartoons or anime.", nsfw=False)
+    @app_commands.command(name="add-movie", description="Categorie(s): films.", nsfw=False)
     async def add_movie(self, interaction: discord.interactions, category: str, name: str):
         await interaction.response.defer()
         category = category.lower()
@@ -97,7 +97,7 @@ class WatchlistCogs(commands.Cog):
                 response += f"🔸\t{item.title()}\n"
             await ctx.send(response)
 
-    @app_commands.command(name="start-watching", description="Catégorie: Séries/Anime/Cartoons, épisodes, saisons" )
+    @app_commands.command(name="start-watching", description="Catégorie: Séries/Anime/Cartoons, épisodes, saisons")
     async def start_watching(self, interaction: discord.interactions, category: str, 
                              name: str, episodes: int, seasons: int):
         await interaction.response.defer()
@@ -136,6 +136,43 @@ class WatchlistCogs(commands.Cog):
         
         # TO-DO AJOUTER UNE COMMANDE START-MOVIE POUR EVITER D'AVOIR A REMPLIR DES EPISODES 
         # TO-DO AJOUTER LA COMMANDE WATCHED QUI METS A JOUR LA COMMANDE START-WATCHING
+    @app_commands.command(name="watched")
+    async def watched(self, interaction: discord.interactions, category: str,
+                    name: str, episode: int =None):
+        await interaction.response.defer()
+        data = load_data()
+        category = category.lower()
+        name = name.title()
+        categorys = category + 's'
+
+        if (category in data) or (categorys in data):
+            if categorys in data:
+                category = categorys 
+
+            repertory = data[category][name]
+            if (category != "films") and (name in repertory) and not episode:
+                repertory['current episode'] += 1
+                repertory['episodes remaining'] -= 1
+                save_data(data)
+                await interaction.followup.send(f"{name.title()} mis à jour, épisodes regardés: {repertory['current episode']}, il reste {repertory['episodes remaining']} episodes.")
+                return
+            elif (category != "films") and episode:
+                repertory['current episode'] = episode
+                repertory['episodes remaining'] -= episode
+                save_data(data)
+                await interaction.followup.send(f"{interaction.user.display_name} a mis à jour {name.title()} épisodes regardés: {episode}, il reste {repertory['episodes remaining']}épisode.")
+                return
+            elif category == "films":
+                if repertory['status'] == 'watched':
+                    await interaction.followup.send(f"Say da melni on a déja regardé {name.title()} deh...")
+                    return
+                else:
+                    repertory['status'] = "watched"
+                    save_data(data)
+                    await interaction.followup.send(f"update de {interaction.user.display_name}Le film {name.title()} a été regardé!")
+                    return 
+        
+
         # TO-DO REMODELER LE NOM DES CATEGORIES AU SINGULIER PARCE QUE "filmS" et "serieS" flemme.
         # AJOUT IFCON POUR WATCHED LORSQUE LA DERNIERE SAISON EST ATTEINTE POUR TRANSITION DU NOM VERS HISTORY 
         # REFLECHIR A UNE COMMANDE POUR LE NOMBRE D'EPISODES PAR SAISON OU SAISON PUIS EPISODES DE LA SAISON TO AVOID HEAVY COMMITMENT
