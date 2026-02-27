@@ -38,6 +38,13 @@
         },
         "Him": {
             "status": "watched"
+        },
+        "Fate/Strange Fake": {
+            "current season": 1,
+            "episodes remaining": 7,
+            "status": "watching",
+            "current episode": 0,
+            "seasons": 1
         }
     },
     "anime": {
@@ -53,6 +60,20 @@
             "episodes remaining": 4,
             "status": "watching",
             "current episode": 8,
+            "seasons": 1
+        },
+        "Sentenced To Be A Hero": {
+            "current season": 1,
+            "episodes remaining": 6,
+            "status": "watching",
+            "current episode": 0,
+            "seasons": 1
+        },
+        "Journal With Witch": {
+            "current season": 1,
+            "episodes remaining": 7,
+            "status": "watching",
+            "current episode": 0,
             "seasons": 1
         }
     },

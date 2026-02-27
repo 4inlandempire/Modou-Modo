@@ -7,17 +7,15 @@ class WatchlistCogs(commands.Cog):
     def __init__(self, bot):
         self.bot = bot 
 
-    @app_commands.command(name="add-movie", description="Categorie(s): films.", nsfw=False)
-    async def add_movie(self, interaction: discord.interactions, category: str, name: str):
+    @app_commands.command(name="add-movie", description="Ajouter un films à la watchlist.", nsfw=False)
+    async def add_movie(self, interaction: discord.interactions, name: str):
         await interaction.response.defer()
-        category = category.lower()
+        category = "films"
         data = load_data()
         name = name.title()
-        categorys = category + 's'
 
-        if (category in data) or (categorys in data):
-            if categorys in data:
-                category = categorys
+
+        if (category in data):
             if name not in data[category]:
                 data[category][name] = {"status":"plan to watch."}
                 save_data(data)
@@ -63,7 +61,7 @@ class WatchlistCogs(commands.Cog):
     async def show_watchlist(self, ctx, category: str =None):
         data = load_data()
 
-        response = '## ▶️ WATCHLISTS\n'
+        response = '## WATCHLISTS ▶️\n'
 
         emojis={"films":"🎬", 
                 "cartoons":"📺",
@@ -79,7 +77,7 @@ class WatchlistCogs(commands.Cog):
             for list_n, list in data.items():
                 if list_n == 'history': continue 
                 icon = emojis.get(list_n.lower(), default_emoji)
-                response += f"# {icon}  {list_n.upper()}  {icon} \n\n"
+                response += f"# {list_n.upper()}  {icon} \n\n"
 
                 for item in list:
                     response += f"🔸\t{item.title()}\n"
@@ -91,7 +89,7 @@ class WatchlistCogs(commands.Cog):
             response = ''
 
             icon = emojis.get(category.lower(), default_emoji)
-            response += f" {icon}  **Watchlist {category.title()}**  {icon}\n\n"
+            response += f"**Watchlist {category.title()}**  {icon}\n\n"
 
             for item in items:
                 response += f"🔸\t{item.title()}\n"
@@ -172,11 +170,11 @@ class WatchlistCogs(commands.Cog):
                     await interaction.followup.send(f"update de {interaction.user.display_name}Le film {name.title()} a été regardé!")
                     return 
         
-        # RETIRER ICON GAUCHE DES TITRES WATCHLISTS C'EST trop kitch
-        # RETIRER CATEGORY DE LA LISTE DES ARGUMENTS DE /add-movie
         # AJOUT IFCON POUR WATCHED LORSQUE LA DERNIERE SAISON EST ATTEINTE POUR TRANSITION DU NOM VERS HISTORY 
         # REFLECHIR A UNE COMMANDE POUR LE NOMBRE D'EPISODES PAR SAISON OU SAISON PUIS EPISODES DE LA SAISON TO AVOID HEAVY COMMITMENT
+        ## Dictionnaire, saisons = {"saison 1": 23, "saison 2": 12, ...}
         # TO-DO AJOUTER UN A WATCHLIST UN --NAME--  (1/12 EPISODES)
+        # AMELIORER LA LOGIQUE DE LA FONCTION WATCHED 
         # FIGURE OUT COMMENT TRAVAILLER SANS JSON OU EN FOURNIR UN LOCAL POUR LE DISCORD 
 
 async def setup(bot):
